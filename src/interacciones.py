@@ -9,8 +9,11 @@ def terminar():
     pygame.quit()
     exit()
 
-def mostrar_texto(superficie:pygame.Surface,coordenada:tuple[int,int] ,texto:str,fuente:pygame.font,color:tuple[int,int,int] = WHITE,bg:tuple[int,int,int] = BLACK):
-    sup_text = fuente.render(texto,True,color,bg)
+def mostrar_texto(superficie:pygame.Surface,coordenada:tuple[int,int] ,texto:str,fuente:pygame.font,color:tuple[int,int,int] = WHITE,bg:tuple[int,int,int] = None):
+    if bg is None:
+        sup_text = fuente.render(texto, True, color)
+    else:
+        sup_text = fuente.render(texto, True, color, bg)
     rect_texto = sup_text.get_rect()
     rect_texto.center = coordenada
 

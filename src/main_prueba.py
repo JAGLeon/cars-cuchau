@@ -92,7 +92,7 @@ while True:
     pygame.mouse.set_visible(True)
     #pantalla inicio
     SCREEN.fill(BLACK)
-    mostrar_texto(SCREEN,POSICION_TITLE,"Asteroides",font,RED)
+    mostrar_texto(SCREEN,POSITION_TITLE,"Asteroides",font,RED)
     rect_start_button = img_start_button.get_rect(center = CENTER_SCREEN)
     SCREEN.blit(img_start_button , rect_start_button)
     pygame.display.flip()

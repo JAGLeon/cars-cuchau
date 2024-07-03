@@ -28,8 +28,8 @@ def detectar_colision_circulos(rect_1,rect_2):
     distancia = distancia_entre_puntos(rect_1.center,rect_2.center)
     return distancia <= r1 + r2
 
-def distancia_entre_autos(new_rect, cars):
+def distancia_entre_autos(new_car, cars):
     for car in cars:
-        if detectar_colision(new_rect["rect"],car["rect"]):
+        if detectar_colision(new_car["rect"], car["rect"]):
             return True
     return False
