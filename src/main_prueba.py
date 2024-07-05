@@ -19,7 +19,7 @@ def mostrar_texto(superficie:pygame.Surface,coordenada:tuple[int,int] ,texto:str
     superficie.blit(sup_text,rect_texto)
     pygame.display.flip()
 
-def wait_user(tecla):
+def wait_user(tecla,tecla2 = None):
     flag_start = True
     while flag_start:
         for event in pygame.event.get():
@@ -30,6 +30,10 @@ def wait_user(tecla):
             if event.type == KEYDOWN:
                 if event.key == tecla:
                     flag_start = False
+                if tecla2:    
+                    if event.key == tecla2:
+                        terminar()
+                        sys.exit()
 
 def wait_user_click(rect_button:pygame.Rect):
     flag_start = True
@@ -92,7 +96,7 @@ while True:
     pygame.mouse.set_visible(True)
     #pantalla inicio
     SCREEN.fill(BLACK)
-    mostrar_texto(SCREEN,POSITION_TITLE,"Asteroides",font,RED)
+    mostrar_texto(SCREEN,POSITION_TITLE,"CAR CUCHAU",font,RED)
     rect_start_button = img_start_button.get_rect(center = CENTER_SCREEN)
     SCREEN.blit(img_start_button , rect_start_button)
     pygame.display.flip()
@@ -155,6 +159,8 @@ while True:
                     if playing_music:
                         pygame.mixer.music.unpause()
                     in_pause = not in_pause
+                if event.key == K_SPACE:
+                    print("Hola")
 
             if event.type == KEYUP:
                 if event.key == K_DOWN or event.key == K_s:
