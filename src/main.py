@@ -19,6 +19,7 @@ img_mute = pygame.transform.scale(pygame.image.load(f"{PATH_IMG}mute.png"),(BONU
 # Carga todas la fuente
 pygame.font.init()
 font = pygame.font.Font("./src/assets/fonts/dash-horizon.otf", 36)
+font_game_over = pygame.font.Font("./src/assets/fonts/dash-horizon.otf", 70)
 
 #Cargo sonido
 pygame.mixer.init()
@@ -52,8 +53,10 @@ pygame.display.set_caption("Cars Cuchau")
 
 
 while True:
+    records = lista_influencers = cargar_csv("records")
     pygame.mouse.set_visible(True)
     intro.play()
+    fin.stop()
     #pantalla inicio
     SCREEN.fill(BLACK)
     mostrar_texto(SCREEN,POSITION_TITLE,"CAR CUCHAU",font,RED)
@@ -276,7 +279,7 @@ while True:
                 car["img"] = pygame.transform.scale(car["img"], (SMALL_CAR_W, SMALL_CAR_H))
 
         #Calcular el tiempo transcurrido
-        tiempo_transcurrido = (pygame.time.get_ticks() - start_time) / 1000  # convertir a segundos
+        tiempo_transcurrido = (pygame.time.get_ticks() - start_time) / 1000
         min_transcurridos = int(tiempo_transcurrido // 60)
         seg_transcurridos = int(tiempo_transcurrido % 60)
         tiempo = f"{min_transcurridos:02}:{seg_transcurridos:02}"
@@ -314,9 +317,10 @@ while True:
         pygame.display.flip()
 
     pygame.mixer.music.stop()
+    guardar_csv("juegos",records)
     fin.play()
     SCREEN.blit(img_game_over,(0,0))
-    mostrar_texto(SCREEN,POSITION_TITLE,"GAME OVER",font,BLUE)
+    mostrar_texto(SCREEN,POSITION_TITLE,"GAME OVER",font_game_over,BLUE)
     mostrar_texto(SCREEN,(MID_WIDTH_SCREEN,HEIGHT - 100),"Presionar espacio para continuar",font,WHITE)
     mostrar_texto(SCREEN,(MID_WIDTH_SCREEN,HEIGHT - 50),"Presionar escape para finalizar",font,WHITE)
     pygame.display.flip()

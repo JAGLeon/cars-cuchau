@@ -67,20 +67,12 @@ def verificar_mute(playing_music,sonido):
     if playing_music:
         sonido.play()
 
-
-def get_path_actual(nombre_archivo:str):
-    '''
-        Se encarga de ubicar el archivo segun el nombre_archivo
-    '''
-    directorio_actual = os.path.dirname(__file__)
-    return os.path.join(directorio_actual, nombre_archivo)
-
 def cargar_csv(nombre_archivo):
     '''
         Se encarga de cargar un archivo csv
         Retorna una lista de diccionarios
     '''
-    with open(get_path_actual(f"{nombre_archivo}.csv")) as archivo:
+    with open(f"{PATH_CSV}{nombre_archivo}.csv") as archivo:
         lista_diccionarios = []
         lector_csv = csv.DictReader(archivo)
         for fila in lector_csv:
@@ -89,25 +81,25 @@ def cargar_csv(nombre_archivo):
     print("El archivo se ha cargado con éxito.")
     return lista_diccionarios
 
-def guardar_csv(nombre_archivo:str,influencers:list):
+def guardar_csv(nombre_archivo:str,records:list):
     """
         Guardo el archivo csv
         En caso de existir te borra lo sobreescribe lo anterior
     """
-    nueva_ruta = get_path_actual(f"{nombre_archivo}.csv")
+    nueva_ruta = f"{PATH_CSV}{nombre_archivo}.csv"
 
     with open(nueva_ruta, 'w', newline='', encoding = "utf-8") as archivo_modificado:
         escritor_csv = csv.writer(archivo_modificado)
-        escritor_csv.writerow(["id","user","likes","dislikes","followers"])
+        escritor_csv.writerow(["id","puesto","user","nivel","tiempo"])
         
-        for influencer in influencers:
-            escritor_csv.writerow([influencer["id"], influencer["user"], influencer["likes"], influencer["dislikes"], influencer["followers"]])
+        for record in records:
+            escritor_csv.writerow([record["id"], record["puesto"], record["user"], record["nivel"], record["tiempo"]])
 
         print(f"Archivo modificado guardado en: {nueva_ruta}")
 
-def guardar_json(nombre_archivo:str,influencers:list):
+def guardar_json(nombre_archivo:str,records:list):
 
-    nueva_ruta = get_path_actual(f"{nombre_archivo}.json")
+    nueva_ruta = f"{PATH_JSON}{nombre_archivo}.json"
     with open(nueva_ruta, "w", encoding = "utf-8") as archivo:
-        json.dump(influencers,archivo,indent=4)
+        json.dump(records,archivo,indent=4)
         print(f"Archivo modificado guardado en: {nueva_ruta}")

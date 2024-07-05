@@ -3,6 +3,8 @@ import pygame
 PATH_IMG = "./src/assets/images/"
 PATH_SOUND = "./src/assets/sounds/"
 PATH_MUSIC = "./src/assets/music/"
+PATH_JSON = "./src/memory_card/json/"
+PATH_CSV = "./src/memory_card/csv/"
 
 
 WIDTH = 800
