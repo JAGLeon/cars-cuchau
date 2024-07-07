@@ -7,6 +7,7 @@ from interacciones import *
 from pygame.locals import *
 
 
+img_fondo_uno = pygame.transform.scale(pygame.image.load(f"{PATH_IMG}fondo_1.png"),SIZE_SCREEN)
 img_fondo = pygame.transform.scale(pygame.image.load(f"{PATH_IMG}fondo.png"),SIZE_SCREEN)
 img_game_over = pygame.transform.scale(pygame.image.load(f"{PATH_IMG}game_over.png"),SIZE_SCREEN)
 img_player = pygame.image.load(f"{PATH_IMG}player.png")
@@ -18,7 +19,7 @@ img_mute = pygame.transform.scale(pygame.image.load(f"{PATH_IMG}mute.png"),(BONU
 # Carga todas la fuente
 pygame.font.init()
 font = pygame.font.Font("./src/assets/fonts/dash-horizon.otf", 36)
-font_game_over = pygame.font.Font("./src/assets/fonts/dash-horizon.otf", 70)
+font_game_over = pygame.font.Font("./src/assets/fonts/dash-horizon.otf", 65)
 
 #Cargo sonido
 pygame.mixer.init()
@@ -63,8 +64,8 @@ while True:
         intro.play()
     fin.stop()
     #pantalla inicio
-    SCREEN.fill(BLACK)
-    mostrar_texto(SCREEN,POSITION_TITLE,"CAR CUCHAU",font,RED)
+    SCREEN.blit(img_fondo_uno, (0,0))
+    mostrar_texto(SCREEN,POSITION_TITLE,"CAR CUCHAU",font_game_over,RED)
     rect_start_button = botones(SCREEN,POSITION_PLAY,"JUGAR",font,RED)
     rect_quit_button = botones(SCREEN,POSITION_QUIT,"SALIR",font,RED)
     mostrar_records(records,SCREEN,font)
