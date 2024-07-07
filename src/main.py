@@ -1,7 +1,6 @@
 import pygame
 from settings import *
 from random import randint
-from aleatorios import *
 from bloques import *
 from colisiones import *
 from interacciones import *
@@ -51,17 +50,24 @@ SCREEN = pygame.display.set_mode(SIZE_SCREEN)
 #Nombre del juego
 pygame.display.set_caption("Cars Cuchau")
 
-
+#Comienzo del juego
+clock = pygame.time.Clock()
 while True:
-    records = lista_influencers = cargar_csv("records")
+    config = cargar_json("config")
+    playing_music = config[0]["mute"]
+    clock.tick(FPS)
+    records = cargar_csv("records")
+    orden_lista(lambda rec_uno,rec_dos: int(rec_uno["tiempo"].replace(":", "")) < int(rec_dos["tiempo"].replace(":", "")),records)
     pygame.mouse.set_visible(True)
-    intro.play()
+    if playing_music:
+        intro.play()
     fin.stop()
     #pantalla inicio
     SCREEN.fill(BLACK)
     mostrar_texto(SCREEN,POSITION_TITLE,"CAR CUCHAU",font,RED)
     rect_start_button = botones(SCREEN,POSITION_PLAY,"JUGAR",font,RED)
     rect_quit_button = botones(SCREEN,POSITION_QUIT,"SALIR",font,RED)
+    mostrar_records(records,SCREEN,font)
     wait_user_click(rect_start_button,rect_quit_button)
 
     #Jugador
@@ -85,10 +91,10 @@ while True:
     escudo = None
 
     #Musica para todo el juego
-    playing_music = True
     pygame.mixer.music.load(f"{PATH_MUSIC}fondo-furioso.mp3")
     pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(loops=-1)
+    if playing_music:
+        pygame.mixer.music.play(loops=-1)
 
     #Configuraciones
     pygame.mouse.set_visible(False)
@@ -102,6 +108,8 @@ while True:
     clock = pygame.time.Clock()
     is_running = True
     while is_running:
+        if not pygame.mixer.music.get_busy() and playing_music:
+            pygame.mixer.music.play(loops=-1)
         intro.stop()
         #Frames
         clock.tick(FPS)
@@ -314,14 +322,30 @@ while True:
         if IMG_FONDO_Y >= HEIGHT - img_fondo.get_height() or IMG_FONDO_Y <= 0:
             direction *= -1
 
-        pygame.display.flip()
+        if lives == 0:
+            fps = 60
+            while fps:
+                clock.tick(fps)
+                fps -= 5
 
+        pygame.display.flip()
+    config[0]["mute"] = playing_music
+    guardar_json("config",config)
+    pygame.mouse.set_visible(True)
     pygame.mixer.music.stop()
-    guardar_csv("juegos",records)
-    fin.play()
+    nombre = writer_screen(SCREEN,font)
+    new_record = {"puesto":None,"user":nombre,"nivel":lvl,"tiempo":tiempo}
+    records.append(new_record)
+    orden_lista(lambda rec_uno,rec_dos: int(rec_uno["tiempo"].replace(":", "")) < int(rec_dos["tiempo"].replace(":", "")),records)
+    asignar_puesto(records)
+    guardar_csv("records",records)
+    verificar_mute(playing_music,fin)
     SCREEN.blit(img_game_over,(0,0))
     mostrar_texto(SCREEN,POSITION_TITLE,"GAME OVER",font_game_over,BLUE)
-    mostrar_texto(SCREEN,(MID_WIDTH_SCREEN,HEIGHT - 100),"Presionar espacio para continuar",font,WHITE)
-    mostrar_texto(SCREEN,(MID_WIDTH_SCREEN,HEIGHT - 50),"Presionar escape para finalizar",font,WHITE)
+    mostrar_texto(SCREEN,CENTER_USER,f"NOMBRE: {new_record["user"]}",font,WHITE)
+    mostrar_texto(SCREEN,CENTER_LVL,f"NIVEL: {new_record["nivel"]}",font,WHITE)
+    mostrar_texto(SCREEN,CENTER_TIME,f"TIEMPO: {new_record["tiempo"]}",font,WHITE)
+    mostrar_texto(SCREEN,POSITION_PRESS_SPACE,"Presionar espacio para continuar",font,WHITE)
+    mostrar_texto(SCREEN,POSITION_PRESS_ESCAPE,"Presionar escape para finalizar",font,WHITE)
     pygame.display.flip()
     wait_user(K_SPACE,K_ESCAPE)
