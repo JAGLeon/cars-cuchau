@@ -38,6 +38,10 @@ intro.set_volume(0.1)
 #Selecciona una imagen de auto al azar
 pygame.init()
 
+#Icono
+icono = pygame.image.load(f"{PATH_IMG}logo.png")
+pygame.display.set_icon(icono)
+
 #Eventos propios
 DRAW_CARS_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(DRAW_CARS_EVENT, TIME_AUTOS)
@@ -49,7 +53,7 @@ pygame.time.set_timer(LVL_UP, TIME_LVL)
 #Tamaño de pantalla
 SCREEN = pygame.display.set_mode(SIZE_SCREEN)
 #Nombre del juego
-pygame.display.set_caption("Cars Cuchau")
+pygame.display.set_caption("Car Cuchau")
 
 #Comienzo del juego
 clock = pygame.time.Clock()
@@ -328,7 +332,6 @@ while True:
             while fps:
                 clock.tick(fps)
                 fps -= 5
-
         pygame.display.flip()
     config[0]["mute"] = playing_music
     guardar_json("config",config)
